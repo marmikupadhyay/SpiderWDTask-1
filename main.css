@@ -1,0 +1,133 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.wrap {
+  min-height: 100vh;
+  position: relative;
+  background: white;
+  overflow: hidden;
+}
+#game-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #343a40;
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #17a2b8;
+  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 0.2), 8px 8px 0 0 rgba(0, 0, 0, 0.19);
+}
+
+.menu h1 {
+  margin-top: 15%;
+  text-align: center;
+  font-size: 3em;
+  font-family: monospace;
+  letter-spacing: -1px;
+  color: white;
+  text-transform: uppercase;
+}
+small {
+  font-size: 0.5em;
+}
+
+.menu .menu-list {
+  margin-top: 100px;
+}
+
+.menu-list.scores {
+  margin-top: 30px;
+}
+.menu .menu-list .list-item {
+  list-style-type: none;
+  font-size: 1.5em;
+  text-align: center;
+  padding-top: 1.5%;
+  background: #343a40;
+  width: 70%;
+  margin: 20px 15%;
+  color: white;
+  min-height: 50px;
+}
+
+.menu .score-item {
+  list-style-type: none;
+  font-size: 1.5em;
+  text-align: center;
+  padding-top: 1.5%;
+  width: 70%;
+  margin: 20px auto;
+  color: white;
+  min-height: 50px;
+}
+
+#powerups {
+  display: none;
+}
+
+.info {
+  margin: 0 5%;
+}
+
+#gameinfo .back,
+#gameinfo .menu-list {
+  margin-top: 0;
+}
+
+.info .subhead {
+  font-size: 1.7em;
+  margin-top: 4%;
+}
+.info .pwrup {
+  display: flex;
+  flex-direction: row;
+  margin: 3% 0;
+}
+.info .pwrup .p {
+  width: 80%;
+  margin-top: 5%;
+}
+.info img {
+  /* float: left; */
+  width: 20%;
+  height: auto;
+}
+#gameinfo .heading {
+  margin-top: 3%;
+}
+.menu .menu-list .list-item:hover {
+  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.2), 4px 4px 0 0 rgba(0, 0, 0, 0.19);
+}
+
+.hide {
+  display: none;
+}
+
+#pause {
+  width: 60px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  left: 70%;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 450px) {
+  #pause {
+    width: 60px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+    left: 80%;
+    z-index: 1;
+  }
+}
