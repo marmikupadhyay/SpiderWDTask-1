@@ -49,12 +49,25 @@ export default class Game {
       this.gameState = 2;
     });
 
-    document.querySelector(".back").addEventListener("click", e => {
-      e.target.parentElement.parentElement.previousElementSibling.classList.remove(
-        "hide"
-      );
-      e.target.parentElement.parentElement.className += " hide";
-      this.gameState = 2;
+    var backs = document.querySelectorAll(".back");
+    backs.forEach(back => {
+      back.addEventListener("click", e => {
+        if (!document.getElementById("gameinfo").classList.contains("hide")) {
+          document.getElementById("gameinfo").className += " hide";
+        } else {
+          e.target.parentElement.parentElement.previousElementSibling.classList.remove(
+            "hide"
+          );
+          e.target.parentElement.parentElement.className += " hide";
+          this.gameState = 2;
+        }
+      });
+    });
+
+    document.getElementById("info").addEventListener("click", e => {
+      if (document.getElementById("gameinfo").classList.contains("hide")) {
+        document.getElementById("gameinfo").classList.remove("hide");
+      }
     });
 
     this.pauseBTn.addEventListener("click", e => {

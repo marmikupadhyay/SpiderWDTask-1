@@ -87,9 +87,9 @@ small {
   margin: 0 5%;
 }
 
-#gameinfo .back,
-#gameinfo .menu-list {
-  margin-top: 0;
+.info p {
+  margin-top: 2vh;
+  font-size: 2.5vh;
 }
 
 .info .subhead {
