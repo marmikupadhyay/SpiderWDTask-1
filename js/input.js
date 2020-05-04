@@ -5,6 +5,7 @@ export default class InputHandler {
     var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     var rectPos = { y: rect.top + scrollTop, x: rect.left + scrollLeft };
     document.addEventListener("mousedown", event => {
+      if (game.gameState == 3) window.location.reload();
       game.mouse.x = event.clientX - rectPos.x;
       game.mouse.y = event.clientY - rectPos.y;
     });
@@ -14,6 +15,7 @@ export default class InputHandler {
     });
     document.addEventListener("touchstart", event => {
       var touch = event.touches[0];
+      if (game.gameState == 3) window.location.reload();
       game.mouse.x = touch.pageX - rectPos.x;
       game.mouse.y = touch.pageY - rectPos.y;
     });
