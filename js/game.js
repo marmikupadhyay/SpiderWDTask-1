@@ -115,7 +115,7 @@ export default class Game {
     this.bubbles.forEach(bubble => {
       this.sumArea += bubble.area;
     });
-    if (this.sumArea >= 0.1 * this.gameArea) {
+    if (this.sumArea >= 0.75 * this.gameArea) {
       this.gameState = GAMESTATE.gameover;
       this.gameOverSound.play();
       this.bgMusic.removeEventListener("ended", {});
