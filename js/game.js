@@ -1,4 +1,8 @@
 var pc = 0;
+
+import Bubble from "../js/bubble.js";
+import Input from "../js/input.js";
+
 const GAMESTATE = {
   paused: 0,
   running: 1,
@@ -14,20 +18,19 @@ export default class Game {
     this.gameHeight = gameHeight;
     this.gameWidth = gameWidth;
     this.gameState = GAMESTATE.menu;
+
+    this.bubbles = [];
+    this.bubbles.push(new Bubble(this));
+    new Input(this);
     this.score = 0;
-    this.immune = false;
-    this.dataX;
-    this.dataY;
     this.pauseBTn = document.getElementById("pause");
-    this.jumpSound = document.getElementById("jump");
-    this.bgSound = document.getElementById("bgMusic");
-    this.deadSound = document.getElementById("dead");
-    this.collectSound = document.getElementById("collect");
-
-    this.bgSound.addEventListener("ended", e => {
-      this.play();
-    });
-
+    this.mouse = {
+      x: 0,
+      y: 0
+    };
+    this.gameArea = this.gameHeight * this.gameWidth;
+    this.sumArea = 0;
+    this.spawnGap = 200;
     this.lives = 1;
     this.gameState = 2;
 
@@ -35,6 +38,7 @@ export default class Game {
     this.ops = 400;
     document.getElementById("play").addEventListener("click", e => {
       e.target.parentElement.parentElement.className += " hide";
+      document.getElementById("pause").classList.remove("hide");
       this.start();
     });
     document.getElementById("scores").addEventListener("click", e => {
@@ -68,7 +72,6 @@ export default class Game {
     this.lives = 1;
     this.gameState = 1;
     this.ops = 400;
-    this.bgSound.play();
     this.pauseBTn.classList.remove("hide");
     this.score = 0;
     this.gameState = GAMESTATE.running;
@@ -76,24 +79,44 @@ export default class Game {
 
   update() {
     if (this.gameState != GAMESTATE.running) return;
+    this.sumArea = 0;
+
+    if (this.counter % this.spawnGap == 0) {
+      this.bubbles.push(new Bubble(this));
+      this.spawnGap -= 2;
+    }
+    this.bubbles.forEach(bubble => {
+      bubble.update(this);
+    });
+    this.bubbles = this.bubbles.filter(object => !object.markedForDeletion);
+    this.bubbles.forEach(bubble => {
+      this.sumArea += bubble.area;
+    });
+    if (this.sumArea > 0.75 * this.gameArea) {
+      this.gameState = GAMESTATE.gameover;
+      this.updateScores;
+    }
+    this.counter++;
   }
   draw(ctx) {
     if (this.gameState == GAMESTATE.menu) {
       return;
     }
+    this.bubbles.forEach(bubble => {
+      bubble.draw(ctx);
+    });
 
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "left";
     var highScore;
-    if (localStorage.getItem("switchscores") != null) {
-      var scores = JSON.parse(localStorage.getItem("switchscores"));
+    if (localStorage.getItem("bubblescores") != null) {
+      var scores = JSON.parse(localStorage.getItem("bubblescores"));
       highScore = scores[4];
     } else {
       highScore = 0;
     }
     ctx.fillText(`Current Score : ${this.score}`, 10, 40);
-    ctx.fillText(`High Score : ${highScore}`, 10, 70);
 
     if (this.gameState === GAMESTATE.gameover) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
@@ -144,8 +167,8 @@ export default class Game {
   putScores() {
     var scoreList = document.querySelector(".scores");
     var scores = [];
-    if (localStorage.getItem("switchscores") != null) {
-      scores = JSON.parse(localStorage.getItem("switchscores"));
+    if (localStorage.getItem("bubblescores") != null) {
+      scores = JSON.parse(localStorage.getItem("bubblescores"));
     }
     scores.sort(function (a, b) {
       return a - b;
@@ -161,8 +184,8 @@ export default class Game {
 
   updateScores() {
     var scores;
-    if (localStorage.getItem("switchscores") != null) {
-      scores = JSON.parse(localStorage.getItem("switchscores"));
+    if (localStorage.getItem("bubblescores") != null) {
+      scores = JSON.parse(localStorage.getItem("bubblescores"));
     } else {
       scores = [0, 0, 0, 0, 0];
     }
@@ -171,8 +194,9 @@ export default class Game {
         scores.push(0);
       }
     }
+
     for (var i = 4; i >= 0; i--) {
-      if (scores[i] < this.score) {
+      if (scores[i] <= this.score) {
         var j = 0;
         while (j < i) {
           scores[j] = scores[j + 1];
@@ -186,7 +210,7 @@ export default class Game {
       return a - b;
     });
     scores.splice(0, scores.length - 5);
-    localStorage.setItem("switchscores", JSON.stringify(scores));
+    localStorage.setItem("bubblescores", JSON.stringify(scores));
   }
 }
 

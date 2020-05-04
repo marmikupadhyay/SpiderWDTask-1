@@ -47,6 +47,15 @@ small {
 .menu-list.scores {
   margin-top: 30px;
 }
+
+#bubble {
+  display: none;
+}
+
+#bubble {
+  border-radius: 100%;
+}
+
 .menu .menu-list .list-item {
   list-style-type: none;
   font-size: 1.5em;

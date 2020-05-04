@@ -1,47 +1,25 @@
 export default class InputHandler {
   constructor(game) {
-    document.addEventListener("keypress", event => {
-      switch (event.keyCode) {
-        case 32:
-          game.ball.speed.y = -game.ball.jumpHeight;
-          game.jumpSound.play();
-          if (game.ball.position.y < game.ball.gameHeight / 2) {
-            game.obstacles.forEach(obstacle => {
-              obstacle.speed.y = 4;
-            });
-            game.collectibles.forEach(collectible => {
-              collectible.speed.y = 4;
-            });
-          }
-          break;
-      }
+    var rect = document.getElementById("game-screen").getBoundingClientRect();
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var rectPos = { y: rect.top + scrollTop, x: rect.left + scrollLeft };
+    document.addEventListener("mousedown", event => {
+      game.mouse.x = event.clientX - rectPos.x;
+      game.mouse.y = event.clientY - rectPos.y;
     });
-
-    document.addEventListener("click", event => {
-      game.ball.speed.y = -game.ball.jumpHeight;
-      game.jumpSound.play();
-      if (game.ball.position.y < game.ball.gameHeight / 2) {
-        game.obstacles.forEach(obstacle => {
-          obstacle.speed.y = 4;
-        });
-        game.collectibles.forEach(collectible => {
-          collectible.speed.y = 4;
-        });
-      }
+    document.addEventListener("mouseup", event => {
+      game.mouse.x = 0;
+      game.mouse.y = 0;
     });
-
-    document.addEventListener("dblclick", e => {
-      if (game.gameState == 3) {
-        game.gameState = 1;
-        game.start();
-        console.log(1);
-        location.reload();
-      }
+    document.addEventListener("touchstart", event => {
+      var touch = event.touches[0];
+      game.mouse.x = touch.pageX - rectPos.x;
+      game.mouse.y = touch.pageY - rectPos.y;
     });
-
-    document.addEventListener("keyup", event => {
-      switch (event.keyCode) {
-      }
+    document.addEventListener("touchend", event => {
+      game.mouse.x = 0;
+      game.mouse.y = 0;
     });
   }
 }
