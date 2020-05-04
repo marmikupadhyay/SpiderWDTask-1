@@ -126,19 +126,25 @@ export default class Bubble {
     this.position.y += this.speed.y;
     if (this.position.x - this.radius < 0) {
       this.speed.x *= -1;
+      this.position.x = this.radius;
     }
     if (this.position.x + this.radius > this.gameWidth) {
       this.speed.x *= -1;
+      this.position.x = this.gameWidth - this.radius;
     }
     if (this.position.y - this.radius < 0) {
       this.speed.y *= -1;
+      this.position.y = this.radius;
     }
     if (this.position.y + this.radius > this.gameHeight) {
       this.speed.y *= -1;
+      this.position.y = this.gameHeight - this.radius;
     }
 
     game.bubbles.forEach(bubble => {
-      this.checkCollision(bubble, this);
+      if (bubble != this) {
+        this.checkCollision(bubble, this);
+      }
     });
   }
 
@@ -150,10 +156,11 @@ export default class Bubble {
       ) <=
       obj1.radius + obj2.radius
     ) {
-      obj1.speed.x *= -1;
+      console.log(1);
       obj2.speed.x *= -1;
-      obj1.speed.y *= -1;
       obj2.speed.y *= -1;
+      obj2.position.x += obj2.speed.x;
+      obj2.position.y += obj2.speed.y;
     }
   }
 }
