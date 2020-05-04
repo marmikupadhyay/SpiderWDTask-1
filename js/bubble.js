@@ -16,6 +16,7 @@ export default class Bubble {
       x: this.maxSpeed.x,
       y: this.maxSpeed.y
     };
+    // this.spawnProtection(game);
     this.markedForDeletion = false;
     this.colorArray = [
       "#FF6633",
@@ -119,7 +120,7 @@ export default class Bubble {
       ) <= this.radius
     ) {
       this.markedForDeletion = true;
-      game.score++;
+      game.score += this.radius;
       console.log(1);
     }
     this.position.x += this.speed.x;
@@ -156,12 +157,31 @@ export default class Bubble {
       ) <=
       obj1.radius + obj2.radius
     ) {
-      console.log(1);
       obj2.speed.x *= -1;
       obj2.speed.y *= -1;
       obj2.position.x += obj2.speed.x;
       obj2.position.y += obj2.speed.y;
     }
+  }
+
+  spawnProtection(game) {
+    game.bubbles.forEach(bubble => {
+      if (bubble != this) {
+        if (
+          Math.sqrt(
+            Math.pow(bubble.position.x - this.position.x, 2) +
+              Math.pow(bubble.position.y - this.position.y, 2)
+          ) <=
+          bubble.radius + this.radius
+        ) {
+          this.position = {
+            x: getRndInt(this.radius, this.gameWidth - this.radius),
+            y: getRndInt(this.radius, this.gameHeight - this.radius)
+          };
+          this.spawnProtection(game);
+        }
+      }
+    });
   }
 }
 function getRndInt(min, max) {

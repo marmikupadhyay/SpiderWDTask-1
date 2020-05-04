@@ -83,6 +83,9 @@ export default class Game {
 
     if (this.counter % this.spawnGap == 0) {
       this.bubbles.push(new Bubble(this));
+      this.bubbles.push(new Bubble(this));
+      this.bubbles.push(new Bubble(this));
+      this.bubbles.push(new Bubble(this));
       this.spawnGap -= 2;
     }
     this.bubbles.forEach(bubble => {
@@ -92,9 +95,9 @@ export default class Game {
     this.bubbles.forEach(bubble => {
       this.sumArea += bubble.area;
     });
-    if (this.sumArea > 0.75 * this.gameArea) {
+    if (this.sumArea >= 0.75 * this.gameArea) {
       this.gameState = GAMESTATE.gameover;
-      this.updateScores;
+      this.updateScores();
     }
     this.counter++;
   }
