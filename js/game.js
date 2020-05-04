@@ -28,6 +28,8 @@ export default class Game {
       x: 0,
       y: 0
     };
+    this.gameOverSound = document.getElementById("dead");
+    this.bgMusic = document.getElementById("bgMusic");
     this.gameArea = this.gameHeight * this.gameWidth;
     this.sumArea = 0;
     this.spawnGap = 200;
@@ -82,6 +84,11 @@ export default class Game {
       this.gameState != GAMESTATE.newlevel
     )
       return;
+    this.bgMusic.play();
+    this.bgMusic.addEventListener("ended", e => {
+      this.play();
+    });
+
     this.lives = 1;
     this.gameState = 1;
     this.ops = 400;
@@ -108,8 +115,11 @@ export default class Game {
     this.bubbles.forEach(bubble => {
       this.sumArea += bubble.area;
     });
-    if (this.sumArea >= 0.75 * this.gameArea) {
+    if (this.sumArea >= 0.1 * this.gameArea) {
       this.gameState = GAMESTATE.gameover;
+      this.gameOverSound.play();
+      this.bgMusic.removeEventListener("ended", {});
+      this.bgMusic.pause();
       this.updateScores();
     }
     this.counter++;

@@ -2,6 +2,7 @@ export default class Bubble {
   constructor(game) {
     this.gameWidth = game.gameWidth;
     this.gameHeight = game.gameHeight;
+    this.popSound = document.getElementById("pop");
     this.radius = getRndInt(30, 60);
     this.position = {
       x: getRndInt(this.radius, this.gameWidth - this.radius),
@@ -120,6 +121,7 @@ export default class Bubble {
       ) <= this.radius
     ) {
       this.markedForDeletion = true;
+      this.popSound.play();
       game.score += this.radius;
       console.log(1);
     }
