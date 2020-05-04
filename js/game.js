@@ -22,6 +22,7 @@ export default class Game {
     this.bubbles = [];
     this.bubbles.push(new Bubble(this));
     new Input(this);
+    this.time = 10;
     this.score = 0;
     this.pauseBTn = document.getElementById("pause");
     this.mouse = {
@@ -30,6 +31,9 @@ export default class Game {
     };
     this.gameOverSound = document.getElementById("dead");
     this.bgMusic = document.getElementById("bgMusic");
+    this.bgMusic.volume = 0.1;
+    this.tickSound = document.getElementById("tick");
+
     this.gameArea = this.gameHeight * this.gameWidth;
     this.sumArea = 0;
     this.spawnGap = 200;
@@ -86,9 +90,10 @@ export default class Game {
       return;
     this.bgMusic.play();
     this.bgMusic.addEventListener("ended", e => {
-      this.play();
+      this.bgMusic.play();
     });
 
+    this.setTimer();
     this.lives = 1;
     this.gameState = 1;
     this.ops = 400;
@@ -115,12 +120,18 @@ export default class Game {
     this.bubbles.forEach(bubble => {
       this.sumArea += bubble.area;
     });
+
     if (this.sumArea >= 0.75 * this.gameArea) {
-      this.gameState = GAMESTATE.gameover;
-      this.gameOverSound.play();
-      this.bgMusic.removeEventListener("ended", {});
-      this.bgMusic.pause();
-      this.updateScores();
+      if (this.time == 0) {
+        this.gameState = GAMESTATE.gameover;
+        this.gameOverSound.play();
+        this.bgMusic.removeEventListener("ended", {});
+        this.bgMusic.pause();
+        this.updateScores();
+      }
+      console.log(this.time);
+    } else {
+      this.time = 10;
     }
     this.counter++;
   }
@@ -144,6 +155,14 @@ export default class Game {
     }
     ctx.fillText(`Current Score : ${this.score}`, 10, 40);
 
+    if (
+      this.time < 10 &&
+      this.time > 0 &&
+      this.sumArea >= 0.75 * this.gameArea
+    ) {
+      ctx.fillText(`Time Left: ${this.time}`, 10, 80);
+      this.tickSound.play();
+    }
     if (this.gameState === GAMESTATE.gameover) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
       ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -237,6 +256,12 @@ export default class Game {
     });
     scores.splice(0, scores.length - 5);
     localStorage.setItem("bubblescores", JSON.stringify(scores));
+  }
+
+  setTimer() {
+    setInterval(() => {
+      this.time--;
+    }, 1000);
   }
 }
 

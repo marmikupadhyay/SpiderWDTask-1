@@ -3,6 +3,7 @@ export default class Bubble {
     this.gameWidth = game.gameWidth;
     this.gameHeight = game.gameHeight;
     this.popSound = document.getElementById("pop");
+    this.popSound.volume = 0.35;
     this.radius = getRndInt(30, 60);
     this.position = {
       x: getRndInt(this.radius, this.gameWidth - this.radius),
@@ -17,7 +18,8 @@ export default class Bubble {
       x: this.maxSpeed.x,
       y: this.maxSpeed.y
     };
-    // this.spawnProtection(game);
+    this.spawnProtection = 1;
+    this.flag = 0;
     this.markedForDeletion = false;
     this.colorArray = [
       "#FF6633",
@@ -114,6 +116,25 @@ export default class Bubble {
     // ctx.restore();
   }
   update(game) {
+    this.flag = 0;
+    if (this.spawnProtection == 1) {
+      game.bubbles.forEach(bubble => {
+        if (bubble != this) {
+          if (
+            Math.sqrt(
+              Math.pow(bubble.position.x - this.position.x, 2) +
+                Math.pow(bubble.position.y - this.position.y, 2)
+            ) <=
+            bubble.radius + this.radius
+          ) {
+            this.flag = 1;
+          }
+        }
+      });
+      if (this.flag != 1) {
+        this.spawnProtection = 0;
+      }
+    }
     if (
       Math.sqrt(
         Math.pow(this.position.x - game.mouse.x, 2) +
@@ -143,12 +164,13 @@ export default class Bubble {
       this.speed.y *= -1;
       this.position.y = this.gameHeight - this.radius;
     }
-
-    game.bubbles.forEach(bubble => {
-      if (bubble != this) {
-        this.checkCollision(bubble, this);
-      }
-    });
+    if (!this.spawnProtection) {
+      game.bubbles.forEach(bubble => {
+        if (bubble != this) {
+          this.checkCollision(bubble, this);
+        }
+      });
+    }
   }
 
   checkCollision(obj1, obj2) {
@@ -164,26 +186,6 @@ export default class Bubble {
       obj2.position.x += obj2.speed.x;
       obj2.position.y += obj2.speed.y;
     }
-  }
-
-  spawnProtection(game) {
-    game.bubbles.forEach(bubble => {
-      if (bubble != this) {
-        if (
-          Math.sqrt(
-            Math.pow(bubble.position.x - this.position.x, 2) +
-              Math.pow(bubble.position.y - this.position.y, 2)
-          ) <=
-          bubble.radius + this.radius
-        ) {
-          this.position = {
-            x: getRndInt(this.radius, this.gameWidth - this.radius),
-            y: getRndInt(this.radius, this.gameHeight - this.radius)
-          };
-          this.spawnProtection(game);
-        }
-      }
-    });
   }
 }
 function getRndInt(min, max) {
