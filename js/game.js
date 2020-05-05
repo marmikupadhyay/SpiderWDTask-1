@@ -37,6 +37,7 @@ export default class Game {
     this.bgMusic = document.getElementById("bgMusic");
     this.bgMusic.volume = 0.1;
     this.tickSound = document.getElementById("tick");
+    this.luckSound = document.getElementById("star");
 
     this.gameArea = this.gameHeight * this.gameWidth;
     this.sumArea = 0;
@@ -86,6 +87,7 @@ export default class Game {
     });
     this.luckBtn.addEventListener("click", e => {
       if (this.lucktimes < 2) {
+        this.luckSound.play();
         this.luckActive = true;
         this.spawnGap *= 2;
         setTimeout(() => {
