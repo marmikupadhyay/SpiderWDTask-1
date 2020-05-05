@@ -29,6 +29,7 @@ export default class Game {
       x: 0,
       y: 0
     };
+    this.mouseDown = 0;
     this.gameOverSound = document.getElementById("dead");
     this.bgMusic = document.getElementById("bgMusic");
     this.bgMusic.volume = 0.1;
@@ -129,7 +130,6 @@ export default class Game {
         this.bgMusic.pause();
         this.updateScores();
       }
-      console.log(this.time);
     } else {
       this.time = 10;
     }

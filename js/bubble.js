@@ -5,6 +5,13 @@ export default class Bubble {
     this.popSound = document.getElementById("pop");
     this.popSound.volume = 0.35;
     this.radius = getRndInt(30, 60);
+    var x = getRndInt(0, 4);
+    if (game.score >= 1000) {
+      this.type = x ? 1 : 0;
+    } else {
+      this.type = 1;
+    }
+    this.life = this.type ? 1 : 25;
     this.position = {
       x: getRndInt(this.radius, this.gameWidth - this.radius),
       y: getRndInt(this.radius, this.gameHeight - this.radius)
@@ -73,49 +80,63 @@ export default class Bubble {
       "#99E6E6",
       "#6666FF"
     ];
+    this.game = game;
+    this.dead = 0;
     this.color = this.colorArray[getRndInt(0, 49)];
     this.area = Math.PI * this.radius * this.radius;
+    this.min = 30;
+    this.max = 60;
+    // this.spawnCheck();
   }
   draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
-
-    // ctx.save();
-    // ctx.beginPath();
-    // ctx.arc(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.radius,
-    //   0,
-    //   Math.PI * 2,
-    //   true
-    // );
-    // ctx.closePath();
-    // ctx.clip();
-    // ctx.drawImage(
-    //   this.bubble,
-    //   this.position.x - this.radius,
-    //   this.position.y - this.radius,
-    //   this.radius * 2,
-    //   this.radius * 2
-    // );
-    // ctx.beginPath();
-    // ctx.arc(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.radius,
-    //   0,
-    //   Math.PI * 2,
-    //   true
-    // );
-    // ctx.clip();
-    // ctx.closePath();
-    // ctx.restore();
+    if (this.type == 1) {
+      ctx.beginPath();
+      ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+    if (this.type == 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(
+        this.position.x,
+        this.position.y,
+        this.radius,
+        0,
+        Math.PI * 2,
+        true
+      );
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(
+        this.bubble,
+        this.position.x - this.radius,
+        this.position.y - this.radius,
+        this.radius * 2,
+        this.radius * 2
+      );
+      ctx.beginPath();
+      ctx.arc(
+        this.position.x,
+        this.position.y,
+        this.radius,
+        0,
+        Math.PI * 2,
+        true
+      );
+      ctx.clip();
+      ctx.closePath();
+      ctx.restore();
+    }
   }
   update(game) {
+    if (this.dead) {
+      this.radius--;
+    }
+    if (game.counter % this.radius == 0) {
+      this.color = this.colorArray[getRndInt(0, 49)];
+    }
     this.flag = 0;
     if (this.spawnProtection == 1) {
       game.bubbles.forEach(bubble => {
@@ -141,10 +162,15 @@ export default class Bubble {
           Math.pow(this.position.y - game.mouse.y, 2)
       ) <= this.radius
     ) {
-      this.markedForDeletion = true;
+      if (game.mouseDown == 1) {
+        this.life--;
+      }
+      console.log(this.life);
+      if (this.life == 0) {
+        this.die();
+        game.score += this.radius;
+      }
       this.popSound.play();
-      game.score += this.radius;
-      console.log(1);
     }
     this.position.x += this.speed.x;
     this.position.y += this.speed.y;
@@ -187,7 +213,49 @@ export default class Bubble {
       obj2.position.y += obj2.speed.y;
     }
   }
+
+  die() {
+    this.dead = 1;
+    setTimeout(() => {
+      this.markedForDeletion = true;
+    }, 400);
+  }
+
+  spawnCheck() {
+    this.game.bubbles.forEach(bubble => {
+      if (bubble != this) {
+        if (
+          Math.sqrt(
+            Math.pow(bubble.position.x - this.position.x, 2) +
+              Math.pow(bubble.position.y - this.position.y, 2)
+          ) <=
+          bubble.radius + this.radius
+        ) {
+          this.radius = Math.floor(Math.random() * (30 + 1)) + 30;
+          this.position = {
+            x:
+              Math.floor(
+                Math.random() * (this.radius - this.gameWidth + this.radius + 1)
+              ) +
+              this.gameWidth -
+              this.radius,
+            y:
+              Math.floor(
+                Math.random() *
+                  (this.radius - this.gameHeight + this.radius + 1)
+              ) +
+              this.gameHeight -
+              this.radius
+          };
+          this.spawnCheck();
+        }
+      }
+    });
+  }
 }
 function getRndInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function customGetRndInt() {
+  return Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
 }

@@ -82,6 +82,20 @@ small {
 #powerups {
   display: none;
 }
+.obs-ctnr {
+  display: flex;
+  flex-direction: row;
+}
+.obstacle {
+  width: 50%;
+  min-height: 100px;
+  text-align: center;
+}
+
+.obstacle img {
+  width: 50% !important;
+  height: auto;
+}
 
 .info {
   margin: 0 5%;
