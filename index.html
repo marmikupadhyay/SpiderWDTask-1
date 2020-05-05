@@ -13,10 +13,12 @@
     <audio src="sounds/bgMusic.mp3" id="bgMusic"></audio>
     <div class="hide" id="pixel" style="width: 100px; background: blue;">q</div>
     <div class="wrap">
-      <img src="imgs/pause.png" alt="" id="pause" class="hide" />
       <img src="imgs/bubble1.png" alt="" id="bubble" class="" />
-
-      <canvas id="game-screen"></canvas>
+      <div class="canvas-wrap">
+        <img src="imgs/pause.png" alt="" id="pause" class="hide" />
+        <img src="imgs/liquidluck.png" alt="" id="luck" class="hide" />
+        <canvas id="game-screen"></canvas>
+      </div>
     </div>
     <section class="menu">
       <h1 class="heading">
@@ -71,6 +73,15 @@
               more than 1000. To break them you need to tap them 5 times.
             </p>
           </div>
+        </div>
+        <h2 class="subhead">PowerUps</h2>
+        <div class="obstacle">
+          <img src="imgs/liquidluck.png" alt="" />
+          <p>
+            This is the Felix-Felicis. Your day gets luckier when you use it.
+            The bubbles spawn slowly for 5 seconds. But you can only use it
+            twice.
+          </p>
         </div>
       </div>
       <ul class="menu-list scores">

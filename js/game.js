@@ -24,7 +24,10 @@ export default class Game {
     new Input(this);
     this.time = 10;
     this.score = 0;
-    this.pauseBTn = document.getElementById("pause");
+    this.pauseBtn = document.getElementById("pause");
+    this.luckBtn = document.getElementById("luck");
+    this.luckActive = false;
+    this.lucktimes = 0;
     this.mouse = {
       x: 0,
       y: 0
@@ -46,6 +49,7 @@ export default class Game {
     document.getElementById("play").addEventListener("click", e => {
       e.target.parentElement.parentElement.className += " hide";
       document.getElementById("pause").classList.remove("hide");
+      document.getElementById("luck").classList.remove("hide");
       this.start();
     });
     document.getElementById("scores").addEventListener("click", e => {
@@ -77,8 +81,19 @@ export default class Game {
       }
     });
 
-    this.pauseBTn.addEventListener("click", e => {
+    this.pauseBtn.addEventListener("click", e => {
       this.togglePause();
+    });
+    this.luckBtn.addEventListener("click", e => {
+      if (this.lucktimes < 2) {
+        this.luckActive = true;
+        this.spawnGap *= 2;
+        setTimeout(() => {
+          this.luckActive = false;
+          this.spawnGap /= 2;
+        }, 5000);
+      }
+      this.lucktimes++;
     });
 
     this.putScores();
@@ -98,7 +113,7 @@ export default class Game {
     this.lives = 1;
     this.gameState = 1;
     this.ops = 400;
-    this.pauseBTn.classList.remove("hide");
+    this.pauseBtn.classList.remove("hide");
     this.score = 0;
     this.gameState = GAMESTATE.running;
   }
@@ -112,8 +127,11 @@ export default class Game {
       this.bubbles.push(new Bubble(this));
       this.bubbles.push(new Bubble(this));
       this.bubbles.push(new Bubble(this));
-      this.spawnGap -= 2;
+      if (!this.luckActive) {
+        this.spawnGap -= 2;
+      }
     }
+
     this.bubbles.forEach(bubble => {
       bubble.update(this);
     });
@@ -164,6 +182,10 @@ export default class Game {
       ctx.fillText(`Time Left: ${this.time}`, 10, 80);
       this.tickSound.play();
     }
+
+    if (this.luckActive) {
+      ctx.fillText(`Liquid Luck Is Active`, 10, 120);
+    }
     if (this.gameState === GAMESTATE.gameover) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
       ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -203,9 +225,9 @@ export default class Game {
       this.gameState = GAMESTATE.running;
     } else this.gameState = GAMESTATE.paused;
     if (pc % 2 == 0) {
-      this.pauseBTn.src = "imgs/play.png";
+      this.pauseBtn.src = "imgs/play.png";
     } else {
-      this.pauseBTn.src = "imgs/pause.png";
+      this.pauseBtn.src = "imgs/pause.png";
     }
     pc++;
   }
