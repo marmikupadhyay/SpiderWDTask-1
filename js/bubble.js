@@ -25,7 +25,7 @@ export default class Bubble {
       x: this.maxSpeed.x,
       y: this.maxSpeed.y
     };
-    this.spawnProtection = 1;
+    this.spawnProtection = 0;
     this.flag = 0;
     this.markedForDeletion = false;
     this.colorArray = [
@@ -83,10 +83,11 @@ export default class Bubble {
     this.game = game;
     this.dead = 0;
     this.color = this.colorArray[getRndInt(0, 49)];
-    this.area = Math.PI * this.radius * this.radius;
+    this.area = 4 * this.radius * this.radius;
     this.min = 30;
     this.max = 60;
-    // this.spawnCheck();
+    this.tries = 0;
+    this.spawnCheck();
   }
   draw(ctx) {
     if (this.type == 1) {
@@ -222,6 +223,11 @@ export default class Bubble {
   }
 
   spawnCheck() {
+    if (this.tries > 100) {
+      this.radius = 0;
+      return;
+    }
+    this.tries++;
     this.game.bubbles.forEach(bubble => {
       if (bubble != this) {
         if (

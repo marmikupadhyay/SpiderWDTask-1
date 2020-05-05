@@ -118,6 +118,7 @@ export default class Game {
       bubble.update(this);
     });
     this.bubbles = this.bubbles.filter(object => !object.markedForDeletion);
+    this.bubbles = this.bubbles.filter(object => object.radius);
     this.bubbles.forEach(bubble => {
       this.sumArea += bubble.area;
     });
