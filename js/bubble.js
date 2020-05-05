@@ -87,7 +87,22 @@ export default class Bubble {
     this.min = 30;
     this.max = 60;
     this.tries = 0;
-    this.spawnCheck();
+    this.gauntlet = document.getElementById("gauntlet");
+    this.width = 100;
+    this.height = 100;
+    var t = getRndInt(0, 20);
+    this.type = t ? this.type : 2;
+    if (this.type == 2) {
+      console.log(1);
+      this.speed = { x: 0, y: 0 };
+      this.radius = this.width / 2;
+      this.position = {
+        x: this.gameWidth / 2,
+        y: 0
+      };
+    } else {
+      this.spawnCheck();
+    }
   }
   draw(ctx) {
     if (this.type == 1) {
@@ -130,6 +145,15 @@ export default class Bubble {
       ctx.closePath();
       ctx.restore();
     }
+    if (this.type == 2) {
+      ctx.drawImage(
+        this.gauntlet,
+        this.position.x - this.width / 2,
+        this.position.y - this.height / 2,
+        this.width,
+        this.height
+      );
+    }
   }
   update(game) {
     if (this.dead) {
@@ -157,22 +181,32 @@ export default class Bubble {
         this.spawnProtection = 0;
       }
     }
+
     if (
       Math.sqrt(
         Math.pow(this.position.x - game.mouse.x, 2) +
           Math.pow(this.position.y - game.mouse.y, 2)
       ) <= this.radius
     ) {
+      if (this.type == 2) {
+        game.bubbles.forEach((bubble, index) => {
+          if (index % 2 == 0) {
+            bubble.die();
+            game.score += bubble.radius;
+          }
+        });
+        console.log(1);
+      }
       if (game.mouseDown == 1) {
         this.life--;
       }
-      console.log(this.life);
       if (this.life == 0) {
         this.die();
         game.score += this.radius;
       }
       this.popSound.play();
     }
+
     this.position.x += this.speed.x;
     this.position.y += this.speed.y;
     if (this.position.x - this.radius < 0) {

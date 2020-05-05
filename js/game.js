@@ -97,7 +97,6 @@ export default class Game {
       }
       this.lucktimes++;
     });
-
     this.putScores();
   }
   start() {
