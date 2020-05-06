@@ -227,7 +227,7 @@ export default class Bubble {
     }
     if (!this.spawnProtection) {
       game.bubbles.forEach(bubble => {
-        if (bubble != this) {
+        if (bubble != this && bubble.type != 2) {
           this.checkCollision(bubble, this);
         }
       });
