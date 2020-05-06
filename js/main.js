@@ -9,13 +9,12 @@ var h =
   window.innerHeight ||
   document.documentElement.clientHeight ||
   document.body.clientHeight;
-
 if (w > 600) {
   var GAME_WIDTH = w / 2;
   var GAME_HEIGHT = 700;
 } else {
   var GAME_WIDTH = w;
-  var GAME_HEIGHT = h;
+  GAME_HEIGHT = document.getElementById("game-screen").height;
 }
 var canvas = document.getElementById("game-screen");
 canvas.width = GAME_WIDTH;
@@ -23,7 +22,9 @@ canvas.height = GAME_HEIGHT;
 var menus = document.querySelectorAll(".menu");
 menus.forEach(menu => {
   menu.style.width = GAME_WIDTH + "px";
-  menu.style.height = GAME_HEIGHT + "px";
+  if (w > 600) {
+    menu.style.height = GAME_HEIGHT + "px";
+  }
 });
 var ctx = canvas.getContext("2d");
 
