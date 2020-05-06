@@ -1,12 +1,14 @@
 # SpiderWDTask-1
 
+### All the sub-tasks that are included are ticked
+
 ## Basic Task
 
 - [x] Design an intro page using pure HTML and CSS.Make the page look attractive aith just CSS.The page must include the game title and the play button and also captions/instructions to play if necssary. On the start of the game,bubbles of random sizes should be generated.
 
 - [x] The bubble must move randomly and bounce in oppositye directions when they hit the sides or any other bubble.They must disappear immediately when the player clicks the bubble.
 
--[x] As the time progresses, the speed of bubble generation must increase.
+- [x] As the time progresses, the speed of bubble generation must increase.
 
 - [x] If more than 75% of the screen gets covered with bubbles for more than 10seconds, the game ends.You can show a timer on-screen to make it thrilling!
 
