@@ -22,9 +22,7 @@ canvas.height = GAME_HEIGHT;
 var menus = document.querySelectorAll(".menu");
 menus.forEach(menu => {
   menu.style.width = GAME_WIDTH + "px";
-  if (w > 600) {
-    menu.style.height = GAME_HEIGHT + "px";
-  }
+  menu.style.height = GAME_HEIGHT + "px";
 });
 var ctx = canvas.getContext("2d");
 
