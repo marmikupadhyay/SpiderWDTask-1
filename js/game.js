@@ -130,6 +130,9 @@ export default class Game {
       this.bubbles.push(new Bubble(this));
       if (!this.luckActive) {
         this.spawnGap -= 2;
+        if (this.spawnGap < 0) {
+          this.spawnGap = 0;
+        }
       }
     }
 
