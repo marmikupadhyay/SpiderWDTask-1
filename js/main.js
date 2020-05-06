@@ -14,7 +14,7 @@ if (w > 600) {
   var GAME_HEIGHT = 700;
 } else {
   var GAME_WIDTH = w;
-  GAME_HEIGHT = document.getElementById("game-screen").height;
+  var GAME_HEIGHT = h;
 }
 var canvas = document.getElementById("game-screen");
 canvas.width = GAME_WIDTH;
