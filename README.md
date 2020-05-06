@@ -2,6 +2,8 @@
 
 ### All the sub-tasks that are included are ticked
 
+### You can play the game [Here](https://marmikupadhyay.github.io/SpiderWDTask-1/)
+
 ## Basic Task
 
 - [x] Design an intro page using pure HTML and CSS.Make the page look attractive aith just CSS.The page must include the game title and the play button and also captions/instructions to play if necssary. On the start of the game,bubbles of random sizes should be generated.
